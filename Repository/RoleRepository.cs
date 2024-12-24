@@ -41,14 +41,14 @@ namespace UserManagementService.Repository
 
         public async Task<Role> Get(string roleName)
         {
-            var role  = await Get(roleName);
+            var role = await _context.Roles.SingleOrDefaultAsync(r => r.RoleName == roleName);
             if (role == null)
             {
-                throw new Exception("Role not found of the user");
+                throw new Exception("Role not found for the user");
             }
-
             return role;
         }
+
 
         public async Task<ICollection<Role>> GetAll()
         {

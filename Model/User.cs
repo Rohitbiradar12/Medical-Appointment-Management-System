@@ -13,7 +13,7 @@ namespace UserManagementService.Model
         public byte[] Key { get; set; }
         public int RoleId {  get; set; }
         [ForeignKey(nameof(RoleId))]
-        public Role role { set; get; }  
+        public virtual Role role { set; get; }  
            
     }
 }

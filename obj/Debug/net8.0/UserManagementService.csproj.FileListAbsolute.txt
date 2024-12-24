@@ -146,3 +146,4 @@ C:\Users\Rohit\OneDrive\Desktop\Medical Appointment Management System\UserManage
 C:\Users\Rohit\OneDrive\Desktop\Medical Appointment Management System\UserManagementService\UserManagementService\obj\Debug\net8.0\UserManagementService.pdb
 C:\Users\Rohit\OneDrive\Desktop\Medical Appointment Management System\UserManagementService\UserManagementService\obj\Debug\net8.0\UserManagementService.genruntimeconfig.cache
 C:\Users\Rohit\OneDrive\Desktop\Medical Appointment Management System\UserManagementService\UserManagementService\obj\Debug\net8.0\ref\UserManagementService.dll
+C:\Users\Rohit\OneDrive\Desktop\Medical Appointment Management System\UserManagementService\UserManagementService\obj\Debug\net8.0\UserManagementService.sourcelink.json

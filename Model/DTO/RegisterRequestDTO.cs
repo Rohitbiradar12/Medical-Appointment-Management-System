@@ -14,6 +14,6 @@ namespace UserManagementService.Model.DTO
         [MinLength(8, ErrorMessage = "Minimum length of password should be 8 characters")]
         public string Password { get; set; } = string.Empty;
         [Required]
-        public Role Role { get; set; }
+        public string Role { get; set; } = string.Empty;
     }
 }

@@ -44,13 +44,11 @@ namespace UserManagementService.Repository
 
         public async Task<User> Get(string email)
         {
-            var user =  await _context.Users.SingleOrDefaultAsync(u => u.Email==email);
-            if(user == null)
-            {
-                throw new Exception("User not found");
-            }
-            return user;
+            return await _context.Users
+                .Include(u => u.role) 
+                .SingleOrDefaultAsync(u => u.Email == email);
         }
+
 
         public async Task<ICollection<User>> GetAll()
         {

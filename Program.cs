@@ -55,8 +55,8 @@ namespace UserManagementService
                 app.UseSwaggerUI();
             }
 
-            app.UseAuthentication(); // Add authentication middleware
-            //app.UseAuthorization();
+            app.UseAuthentication(); 
+            app.UseAuthorization();
 
             app.MapControllers();
 

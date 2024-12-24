@@ -12,8 +12,8 @@ using UserManagementService.Context;
 namespace UserManagementService.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20241223210443_initialize")]
-    partial class initialize
+    [Migration("20241224081436_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
