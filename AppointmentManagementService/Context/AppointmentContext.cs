@@ -22,7 +22,7 @@ namespace AppointmentManagementService.Context
                 
                 new Appointment
                 {
-                    Id = 3,
+                    Id = 4,
                     PatientId = 3,
                     DoctorId = 3,
                     AppointmentDateTime = new DateTime(2024, 12, 25, 12, 0, 0),
