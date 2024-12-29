@@ -49,15 +49,12 @@ namespace AppointmentManagementService.Repository
         public async Task<Appointment> GetAppointmentByDoctorAndPatientAsync(int doctorId, int patientId, DateTime appointmentDateTime)
         {
             var appointment = await _context.Appointments.SingleOrDefaultAsync(u => u.DoctorId == doctorId &&
-                                                                        u.PatientId == patientId && 
-                                                                        u.AppointmentDateTime == appointmentDateTime);
-            if (appointment == null)
-            {
-                throw new Exception("Appointment not found");
-            }
+                                                                                     u.PatientId == patientId &&
+                                                                                     u.AppointmentDateTime == appointmentDateTime);
 
-            return appointment;
+            return appointment; 
         }
+
 
         public async Task<IEnumerable<Appointment>> GetByDoctorIdAsync(int doctorId)
         {

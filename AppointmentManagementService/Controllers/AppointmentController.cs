@@ -2,6 +2,7 @@
 using AppointmentManagementService.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace AppointmentManagementService.Controllers
 {
@@ -19,6 +20,10 @@ namespace AppointmentManagementService.Controllers
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> BookAppointment([FromBody] BookAppointmentRequestDTO request)
         {
+            if (request == null)
+            {
+                return BadRequest(new { message = "Request body is null." });
+            }
             try
             {
                 var user = User;  // ClaimsPrincipal from HttpContext

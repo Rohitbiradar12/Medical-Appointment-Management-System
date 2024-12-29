@@ -2,6 +2,7 @@
 using AppointmentManagementService.Model;
 using AppointmentManagementService.Model.DTO;
 using AppointmentManagementService.Repository;
+using System.Net.Http;
 using AutoMapper;
 
 namespace AppointmentManagementService.Service
@@ -12,13 +13,15 @@ namespace AppointmentManagementService.Service
         private readonly ITokenService tokenService;
         private readonly ILogger<AppointmentService> logger;
         private readonly IMapper mapper;
+        private readonly HttpClient httpClient;
 
-        public AppointmentService(IAppointmentRepository appointmentRepository, ILogger<AppointmentService> logger, IMapper mapper, ITokenService tokenService)
+        public AppointmentService(IAppointmentRepository appointmentRepository, ILogger<AppointmentService> logger, IMapper mapper, ITokenService tokenService, HttpClient httpClient)
         {
             this.appointmentRepository = appointmentRepository;
             this.logger = logger;
             this.mapper = mapper;
             this.tokenService = tokenService;
+            this.httpClient = httpClient;
         }
 
         public async Task<AppointmentResponseDTO> BookAppointmentAsync(BookAppointmentRequestDTO request, ClaimsPrincipal user)
@@ -28,10 +31,18 @@ namespace AppointmentManagementService.Service
 
             logger.LogInformation($"Booking appointment for UserID: {userId}, Role: {userRole}");
 
+
             if (userRole != "Patient" || userId != request.PatientId)
             {
                 logger.LogWarning($"Unauthorized access attempt by UserID: {userId}, Role: {userRole}");
                 throw new UnauthorizedAccessException("You are not authorized to book this appointment.");
+            }
+
+            var isDoctorAvailable = await CheckDoctorAvailabilityAsync(request.DoctorId);
+            if (!isDoctorAvailable)
+            {
+                logger.LogWarning($"Doctor with ID {request.DoctorId} is not available for appointment at {request.AppointmentDateTime}.");
+                throw new InvalidOperationException("Doctor is not available at the requested time.");
             }
 
             var existingAppointment = await appointmentRepository.GetAppointmentByDoctorAndPatientAsync(request.DoctorId, request.PatientId, request.AppointmentDateTime);
@@ -51,6 +62,8 @@ namespace AppointmentManagementService.Service
 
             return mapper.Map<AppointmentResponseDTO>(createdAppointment);
         }
+
+
 
         public async Task<bool> CancelAppointmentAsync(int id, ClaimsPrincipal user)
         {
@@ -145,5 +158,32 @@ namespace AppointmentManagementService.Service
 
             return mapper.Map<AppointmentResponseDTO>(updatedAppointment);
         }
+
+        public async Task<bool> CheckDoctorAvailabilityAsync(int doctorId)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync($"http://localhost:5223/api/Availability/{doctorId}");
+                response.EnsureSuccessStatusCode();
+
+                var availabilityDto = await response.Content.ReadFromJsonAsync<AvailabilityDto>();
+
+                if (availabilityDto == null || !availabilityDto.IsAvailable)
+                {
+                    logger.LogWarning($"Doctor with ID {doctorId} is not available.");
+                    return false;
+                }
+
+                logger.LogInformation($"Doctor with ID {doctorId} is available.");
+                return true;
+            }
+            catch (HttpRequestException ex)
+            {
+                logger.LogError(ex, $"Error occurred while checking availability for Doctor ID: {doctorId}");
+                throw new ApplicationException("Unable to check doctor availability. Please try again later.", ex);
+            }
+        }
+
+
     }
 }

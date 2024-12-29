@@ -1,4 +1,3 @@
-
 using System.Text;
 using AppointmentManagementService.Context;
 using AppointmentManagementService.Mapper;
@@ -49,6 +48,7 @@ namespace AppointmentManagementService
             builder.Services.AddScoped<IAppointmentService,AppointmentService>();   
             builder.Services.AddScoped<ITokenService, TokenService>();
             #endregion
+            builder.Services.AddHttpClient();
 
             builder.Services.AddCors(options =>
             {
