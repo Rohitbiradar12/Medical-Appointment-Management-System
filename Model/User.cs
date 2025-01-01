@@ -11,6 +11,8 @@ namespace UserManagementService.Model
         public byte[] Password { get; set; } 
         public DateTime CreatedAt { get; set; }
         public byte[] Key { get; set; }
+        public bool IsEmailVerified { get; set; }
+        public string? EmailVerificationToken { get; set; }
         public int RoleId {  get; set; }
         [ForeignKey(nameof(RoleId))]
         public virtual Role role { set; get; }  

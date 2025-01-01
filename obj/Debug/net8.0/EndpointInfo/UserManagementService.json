@@ -140,6 +140,27 @@
           }
         }
       }
+    },
+    "/api/User/verify-email": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -247,6 +268,13 @@
           "key": {
             "type": "string",
             "format": "byte",
+            "nullable": true
+          },
+          "isEmailVerified": {
+            "type": "boolean"
+          },
+          "emailVerificationToken": {
+            "type": "string",
             "nullable": true
           },
           "roleId": {

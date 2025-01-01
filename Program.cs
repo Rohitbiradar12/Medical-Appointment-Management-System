@@ -11,7 +11,7 @@ namespace UserManagementService
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -21,10 +21,14 @@ namespace UserManagementService
             builder.Services.AddSwaggerGen();
 
             // Register repositories and services
-            builder.Services.AddScoped<IRepository<int, User>, UserRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IRepository<int, Role>, RoleRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
+            //builder.Services.AddAutoMapper(typeof(UserProfile));
+
+           
 
             // Configure DbContext
             builder.Services.AddDbContext<UserDbContext>(options =>
@@ -47,6 +51,10 @@ namespace UserManagementService
                 });
 
             var app = builder.Build();
+            var serviceProvider = app.Services.CreateScope().ServiceProvider;
+            var userService = serviceProvider.GetRequiredService<IUserService>();
+            await userService.SeedAdminUserAsync();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

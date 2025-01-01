@@ -76,5 +76,21 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "UserManagementService.Controllers.UserController",
+    "Method": "VerifyEmailAsync",
+    "RelativePath": "api/User/verify-email",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

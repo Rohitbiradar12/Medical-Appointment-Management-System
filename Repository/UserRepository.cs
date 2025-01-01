@@ -4,7 +4,7 @@ using UserManagementService.Model;
 
 namespace UserManagementService.Repository
 {
-    public class UserRepository : IRepository<int, User>
+    public class UserRepository : IUserRepository
     {
         private readonly UserDbContext _context;    
         public UserRepository(UserDbContext context)
@@ -60,6 +60,12 @@ namespace UserManagementService.Repository
                return await user.ToListAsync();
         }
 
+        public async Task<User> GetUserByEmailVerificationTokenAsync(string token)
+        {
+            return await _context.Users
+                .SingleOrDefaultAsync(u => u.EmailVerificationToken == token);
+        }
+
         public async Task<User> Update(User entity)
         {
             var user = await Get(entity.Id);
@@ -67,9 +73,13 @@ namespace UserManagementService.Repository
             {
                 throw new Exception("User not found");
             }
-            _context.Users.Update(entity);
+
+            // Explicitly set the entity's state to modified
+            _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return entity;
+
+            return user;
         }
+
     }
 }

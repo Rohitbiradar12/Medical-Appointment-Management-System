@@ -12,7 +12,7 @@ using UserManagementService.Context;
 namespace UserManagementService.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20241224081436_init")]
+    [Migration("20250101120316_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -74,9 +74,16 @@ namespace UserManagementService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EmailVerificationToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEmailVerified")
+                        .HasColumnType("bit");
 
                     b.Property<byte[]>("Key")
                         .IsRequired()
